@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request, status
 from app.models.agentModels import AgentTurnIn, AgentTurnOut
 from app.services.agentService import AgentService
 
-router = APIRouter(prefix="/agent", tags=["agent"])
+router = APIRouter(prefix="/api/agent", tags=["agent"])
 
 def getAgent(request: Request) -> AgentService:
     svc = getattr(request.app.state, "agent_service", None)

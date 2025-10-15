@@ -4,7 +4,7 @@ import httpx
 from fastapi import APIRouter, HTTPException
 from app.models.sessionModels import SessionIn, SessionOut, ClientSecret
 
-router = APIRouter(prefix="/session", tags=["session"])
+router = APIRouter(prefix="/api/session", tags=["session"])
 REALTIME_SESSIONS_URL = "https://api.openai.com/v1/realtime/sessions"
 
 @router.post("", response_model=SessionOut, summary="Create Realtime ephemeral session token")
