@@ -10,7 +10,9 @@ class OrderItem(BaseModel):
     subTotal: float = Field(0.0, description="Calculated subtotal for this item (including extras)")
 
 class Order(BaseModel):
-    """Full order model with all pizzas and grand total."""
     customerName: Optional[str] = Field(None, description="Name of the customer (optional for now)")
     pizzas: List[OrderItem] = Field(..., description="List of pizzas in the order")
-    grandTotal: float = Field(..., description="Final total including all items and extras, in ZAR")
+    grandTotal: Optional[float] = Field(  # <-- make optional/nullable
+        None,
+        description="Final total including all items and extras, in ZAR. Optional on input; server may compute later."
+    )
