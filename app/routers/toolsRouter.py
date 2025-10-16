@@ -2,6 +2,7 @@
 from fastapi import APIRouter
 from app.routers.tools.menuToolsRouter import router as menuRouter
 from app.routers.tools.orderToolsRouter import router as orderRouter
+from app.routers.tools.recommendationRouter import router as recommendationsRouter
 
 router = APIRouter(prefix="/api/tools", tags=["tools"])
 
@@ -12,3 +13,4 @@ def greet():
 # Mount feature-specific routers
 router.include_router(menuRouter)
 router.include_router(orderRouter)
+router.include_router(recommendationsRouter)

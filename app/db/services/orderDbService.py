@@ -33,3 +33,11 @@ def deleteOrder(db: Session, orderId: int) -> bool:
     db.delete(order)
     db.commit()
     return True
+
+def getOrdersByCustomerId(db: Session, customerId: int) -> list[Order]:
+    return (
+        db.query(Order)
+        .filter(Order.customerId == customerId)
+        .order_by(Order.createdAt.desc())
+        .all()
+    )
