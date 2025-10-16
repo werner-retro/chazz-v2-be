@@ -7,7 +7,7 @@ router = APIRouter(prefix="/api/tools", tags=["tools"])
 
 @router.get("/greet")
 def greet():
-    return {"message": "[[SAY]]Welcome to Cheesy Chazz Pizza! How can I help you today?[[/SAY]]"}
+    return {"message": "[[SAY]]Welcome to the Cheesy Chazz Pizza Ordering Hotline! Please provide me with your name and phone number sothet we can take your order.[[/SAY]]"}
 
 # Mount feature-specific routers
 router.include_router(menuRouter)

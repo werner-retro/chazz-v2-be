@@ -1,3 +1,4 @@
+import re
 from sqlalchemy.orm import Session
 from app.db.orderDbModels import Customer
 
@@ -11,8 +12,17 @@ def createCustomer(db: Session, name: str, phone: str | None = None, address: st
 def getCustomerById(db: Session, customerId: int) -> Customer | None:
     return db.query(Customer).filter(Customer.id == customerId).first()
 
-def getCustomerByName(db: Session, name: str) -> Customer | None:
-    return db.query(Customer).filter(Customer.name == name).first()
+def normalizePhone(phone: str) -> str:
+    """Remove all non-digit characters from a phone number."""
+    return re.sub(r"\D", "", phone)
+
+def getCustomerByNameAndPhone(db: Session, name: str, phone: str) -> Customer | None:
+    normalizedPhone = normalizePhone(phone)
+    customers = db.query(Customer).filter(Customer.name == name).all()
+    for customer in customers:
+        if normalizePhone(customer.phone or "") == normalizedPhone:
+            return customer
+    return None
 
 def getAllCustomers(db: Session) -> list[Customer]:
     return db.query(Customer).all()

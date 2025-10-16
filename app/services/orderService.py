@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from typing import Tuple
 
 from app.models.orderModels import Order as OrderIn
-from app.db.services.customerDbService import createCustomer, getCustomerByName
+from app.db.services.customerDbService import createCustomer, getCustomerByNameAndPhone
 from app.db.services.orderDbService import createOrder
 from app.db.services.orderItemDbService import createOrderItem
 from app.db.services.orderItemExtraDbService import createOrderItemExtra
@@ -25,10 +25,10 @@ def processIncomingOrder(db: Session, orderIn: OrderIn) -> Tuple[int, float]:
 
     # 2. Get or create customer (by name)
     customerRow = None
-    if orderIn.customerName:
-        customerRow = getCustomerByName(db, orderIn.customerName)
+    if orderIn.customerName and orderIn.customerPhone:
+        customerRow = getCustomerByNameAndPhone(db, orderIn.customerName, orderIn.customerPhone)
         if not customerRow:
-            customerRow = createCustomer(db, name=orderIn.customerName)
+            customerRow = createCustomer(db, name=orderIn.customerName, phone=orderIn.customerPhone)
 
     # 3. Create order
     orderRow = createOrder(
