@@ -1,3 +1,4 @@
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 from app.db.orderDbModels import Order
 
@@ -34,10 +35,37 @@ def deleteOrder(db: Session, orderId: int) -> bool:
     db.commit()
     return True
 
-def getOrdersByCustomerId(db: Session, customerId: int) -> list[Order]:
-    return (
-        db.query(Order)
-        .filter(Order.customerId == customerId)
-        .order_by(Order.createdAt.desc())
-        .all()
-    )
+def getOrdersByCustomerId(db: Session, customerId: int | None) -> list[Order]:
+    """
+    Safely fetch all orders for a given customer ID.
+    Returns an empty list if the customerId is None or no orders exist.
+    """
+    if not customerId:
+        return []
+
+    try:
+        return (
+            db.query(Order)
+            .filter(Order.customerId == customerId)
+            .order_by(Order.createdAt.desc())
+            .all()
+        )
+    except Exception as e:
+        print(f"⚠️ Error fetching orders for customerId={customerId}: {e}")
+        return []
+    
+def getAllTodaysOrders(db: Session) -> list[Order]:
+    """
+    Fetch all orders placed today (same calendar day), across all customers.
+    Returns an empty list if no matching orders exist.
+    """
+    try:
+        return (
+            db.query(Order)
+            .filter(func.date(Order.createdAt) == func.current_date())
+            .order_by(Order.createdAt.desc())
+            .all()
+        )
+    except Exception as e:
+        print(f"⚠️ Error fetching today's orders: {e}")
+        return []

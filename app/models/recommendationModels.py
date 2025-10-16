@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Literal
 from pydantic import BaseModel, Field
 
 
@@ -16,3 +16,4 @@ class PreviousOrdersResponse(BaseModel):
         default_factory=list,
         description="Simplified list of previously ordered pizzas with extras"
     )
+    userStatus: Literal["new", "existing"]
