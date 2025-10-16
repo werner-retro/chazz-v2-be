@@ -1,21 +1,14 @@
 # app/routers/toolsRouter.py
 from fastapi import APIRouter
-from pydantic import BaseModel
+from app.routers.tools.menuToolsRouter import router as menuRouter
+from app.routers.tools.orderToolsRouter import router as orderRouter
 
 router = APIRouter(prefix="/api/tools", tags=["tools"])
 
-class AddIn(BaseModel):
-    a: float
-    b: float
-
-@router.get("/ping")
-def ping():
-    return {"status": "ok"}
-
-@router.post("/add")
-def add_numbers(body: AddIn):
-    return {"sum": body.a + body.b + 1000}
-
 @router.get("/greet")
 def greet():
-    return {"message": "[[SAY]]Good day, Mr Pretorius.[[/SAY]]"}
+    return {"message": "[[SAY]]Welcome to Cheesy Chazz Pizza! How can I help you today?[[/SAY]]"}
+
+# Mount feature-specific routers
+router.include_router(menuRouter)
+router.include_router(orderRouter)
